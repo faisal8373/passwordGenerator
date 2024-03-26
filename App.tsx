@@ -4,12 +4,13 @@ import { useState } from 'react'
 import * as Yup from 'yup'
 import { create } from 'react-test-renderer'
 import { Formik } from 'formik'
-import BouncyCheckbox from 'react-native-bouncy-checkbox'
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
+
 const passwordSchema = Yup.object().shape({
 passwordLength: Yup.number()
-.min(8, 'Password is too short - should be 8 chars minimum.')
-.max(20, 'Password is too long - should be 20 chars maximum.')
-.required('Password is required')
+.min(8, 'Password is too short.')
+.max(20, 'Password is too long.')
+.required('Password is required.')
 })
 export default function App() {
   const [password, setPassword] = useState('')
@@ -55,7 +56,7 @@ export default function App() {
   }
   const resetPasswordState = () => {
     setPassword('')
-    setIsPassGenerated(true)
+    setIsPassGenerated(false)
     setLowerCase(false)
     setUpperCase(false)
     setNumber(false)
@@ -63,13 +64,15 @@ export default function App() {
   }
     return (
     <ScrollView keyboardShouldPersistTaps='handled'>
-      <SafeAreaView style={styles.appConatiner}>
+      <SafeAreaView style={styles.appContainer}>
         <View style={styles.formContainer}>
           <Text style={styles.title}>Password Generator</Text>
           <Formik
        initialValues={{passwordLength:''}}
         validationSchema={passwordSchema}
-        onSubmit={(values) => {generatePasswordString(+values.passwordLength)}} //TODO: Add password length
+        onSubmit={(values) => {
+          console.log(values)
+          generatePasswordString(+values.passwordLength)}} //TODO: Add password length
      >
        {({
          values,
@@ -93,7 +96,7 @@ export default function App() {
          <TextInput
           value={values.passwordLength}
           onChangeText={handleChange('passwordLength')}
-          style={styles.inputText}
+          style={styles.inputStyle}
          keyboardType='numeric'
          placeholder='Type number here'></TextInput>
          </View>
@@ -137,7 +140,7 @@ export default function App() {
   />
 </View>
 
-<View style={styles.formAction}>
+<View style={styles.formActions}>
   <TouchableOpacity 
   disabled={!isValid}
   onPress={handleSubmit}
@@ -207,10 +210,10 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     padding: 8,
-    width: '30%',
+    width: '40%',
     borderWidth: 1,
-    borderRadius: 4,
-    borderColor: '#16213e',
+    borderRadius: 8,
+    borderColor: 'green',
   },
   errorText: {
     fontSize: 12,
@@ -226,11 +229,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginHorizontal: 8,
     backgroundColor: '#5DA3FA',
+    
   },
   primaryBtnTxt: {
     color: '#fff',
     textAlign: 'center',
     fontWeight: '700',
+    
   },
   secondaryBtn: {
     width: 120,
@@ -238,6 +243,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginHorizontal: 8,
     backgroundColor: '#CAD5E2',
+    marginTop: 5,
+
   },
   secondaryBtnTxt: {
     textAlign: 'center',
